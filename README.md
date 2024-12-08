@@ -6,7 +6,7 @@
 * **Simple and Intuitive:** Westore 内部使用 deepClone + dataDiff 换取最短路径 `setData` 和更符合直觉的编程体验，只需 `update`，不需要再使用 `setData`。
 * **Testability:** View 和 Model 之间没有直接依赖，开发者能够借助模拟对象注入测试两者中的任一方。
 
-![](./assets/ws.png)
+![](./assets/westore.png)
 
 Westore 架构和 MVP(Model-View-Presenter) 架构很相似:
 
