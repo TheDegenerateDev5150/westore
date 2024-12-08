@@ -39,142 +39,68 @@ npm 相关问题参考：[小程序官方文档: npm 支持](https://developers.
 
 ## 举个例子
 
-> 开发如下图所示的重命名 app
+<img src="./assets/home-demo.jpg" width="400px">
 
-<img src="./assets/rename-app.png" width="300px">
+其类图如下所示：
 
-按照传统的小程序开发三部曲：
-
-* 写页面结构 wxml 
-* 写页面样式 wxss
-* 写页面逻辑 js/ts
-
-省略 wxml、wxss，js 如下:
+<img src="./assets/home-class.jpg" width="600px">
 
 ```js
-Page({
-  data: {
-    nickName: ''
-  },
+// 平台无关的 Model
+import Counter from '../models/counter'
+// 平台无关的 Model
+import User  from '../models/user'
+import { Store }  from 'westore'
 
-  async onLoad() {
-    const nickName = await remoteService.getNickName()
-    this.setData({
-      nickName: nickName
-    })
-  },
-
-  async modifyNickName(newNickName) {
-    await remoteService.modifyNickName(newNickName)
-  },
-
-  clearInput() {
-    this.setData({
-      nickName: ''
-    })
-  }
-})
-```
-
-需求开发全部结束。
-
-### 使用 Westore 重构
-
-<img src="./assets/demo-a.png" width="600px">
-
-定义 User 实体:
-
-```js
-class User {
-  constructor({ nickName, onNickNameChange }) {
-    this.nickName = nickName || ''
-    this.onNickNameChange = onNickNameChange || function() { }
-  }
-
-  checkNickName() {
-    // 省略 nickName 规则校验
-  }
-
-  modifyNickName(nickName) {
-    if(this.checkNickName(nickName) && nickName !== this.nickName) {
-      this.nickName = nickName
-      this.onNickNameChange(nickName)
-    }
-  }
-}
-
-module.exports = User
-```
-
-定义 UserStore:
-
-```js
-const { Store } = require('westore')
-const User = require('../models/user')
-
-class UserStore extends Store {
-  constructor(options) {
+// 页面 store，一个页面一个
+class HomeStore extends Store {
+  constructor() {
     super()
-    this.options = options
     this.data = {
-      nickName: ''
+      count: 0,
+      motto: 'Hello World',
+      userInfo: null
     }
-  }
-
-  init() {
-    const nickName = await remoteService.getNickName()
-    this.user = new User({ 
-      nickName,
-      onNickNameChange: (newNickName)=>{
-        this.data.nickName = newNickName
-        this.update()
-        await remoteService.modifyNickName(newNickName)
-      } 
+    // 消费 Model
+    this.counter = new Counter()
+    // 消费 Model
+    this.user = new User({
+      onUserInfoLoaded: () => {
+        this.syncUserModel()
+      }
     })
+    this.syncCountModel()
   }
 
-  async saveNickName(newNickName) {
-    this.user.modifyNickName(newNickName)
-  },
-
-  modifyInputNickName(input) {
-    this.data.nickName = input
+  // 同步 Model 的数据到 ViewModel 并更新视图
+  syncCountModel () {
+    this.data.count = this.counter.count
     this.update()
   }
+
+  // 同步 Model 的数据到 ViewModel 并更新视图 
+  syncUserModel () {
+    this.data.motto = this.user.motto
+    this.data.userInfo = this.user.userInfo
+    this.update()
+  }
+
+  increment() {
+    this.counter.increment()
+    this.syncCountModel()
+  }
+
+  decrement() {
+    this.counter.decrement()
+    this.syncCountModel()
+  }
+
+  getUserProfile() {
+    this.user.getUserProfile()
+  }
 }
 
-module.exports = new UserStore
-```
-
-页面使用 UserStore:
-
-```js
-const userStore = require('../../stores/user-store')
-
-Page({
-  data: userStore.data,
-
-  onLoad() {
-    /* 绑定 view 到 store 
-      也可以给 view 取名 userStore.bind('userPage', this)
-      取名之后在 store 里可通过 this.update('userPage') 更新 view
-      不取名可通过 this.update() 更新 view
-    */
-    userStore.bind(this)
-  },
-
-  saveNickName(newNickName) {
-    userStore.saveNickName(newNickName)
-  },
-
-  onInputChange(evt) {
-    userStore.modifyInputNickName(evt.currentTarget.value)
-  },
-
-  clearInput() {
-    userStore.modifyInputNickName('')
-  }
-})
+module.exports = new HomeStore
 ```
 
 通用 Model 是框架无关的，对于这样简单的程序甚至不值得把这种逻辑分开，但是随着需求的膨胀你会发现这么做带来的巨大好处。所以下面举一个复杂一点点的例子。
