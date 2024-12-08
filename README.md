@@ -39,11 +39,11 @@ npm 相关问题参考：[小程序官方文档: npm 支持](https://developers.
 
 ## 举个例子
 
-<img src="./assets/home-demo.jpg" width="400px">
+<img src="./assets/home-demo.png" width="400px">
 
 其类图如下所示：
 
-<img src="./assets/home-class.jpg" width="600px">
+<img src="./assets/home-class.png" width="600px">
 
 ```js
 // 平台无关的 Model
