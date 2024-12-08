@@ -14,7 +14,6 @@ class HomeStore extends Store {
     this.user = new User({
       onUserInfoLoaded: () => {
         this.syncUserModel()
-        this.update()
       }
     })
     this.syncCountModel()
@@ -22,23 +21,23 @@ class HomeStore extends Store {
 
   syncCountModel () {
     this.data.count = this.counter.count
+    this.update()
   }
 
   syncUserModel () {
     this.data.motto = this.user.motto
     this.data.userInfo = this.user.userInfo
+    this.update()
   }
 
   increment() {
     this.counter.increment()
     this.syncCountModel()
-    this.update()
   }
 
   decrement() {
     this.counter.decrement()
     this.syncCountModel()
-    this.update()
   }
 
   getUserProfile() {
