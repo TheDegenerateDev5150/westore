@@ -40,3 +40,18 @@
   top: 5px;
   left: -5px;
 }
+
+.counter {
+  margin-top: 20rpx;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10rpx;
+}
+
+.counter button {
+  margin: 0 10rpx;
+  width: 100px !important;
+  text-align: center !important;
+}

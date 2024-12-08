@@ -1,9 +1,9 @@
 // index.js
 // 获取应用实例
-const userStore = require('../../stores/user-store')
+const homeStore = require('../../stores/home-store')
 
 Page({
-  data: userStore.data,
+  data: homeStore.data,
 
   bindViewTap() {
     wx.navigateTo({
@@ -12,11 +12,19 @@ Page({
   },
 
   onLoad() {
-    userStore.bind(this)
+    homeStore.bind(this)
   },
 
   getUserProfile() {
-    userStore.getUserProfile()
+    homeStore.getUserProfile()
+  },
+
+  decrement() {
+    homeStore.decrement()
+  },
+
+  increment() {
+    homeStore.increment()
   },
 
   gotoOtherPage() {

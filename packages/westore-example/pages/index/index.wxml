@@ -12,6 +12,9 @@
   <view class="usermotto">
     <text class="user-motto">{{motto}}</text>
   </view>
+  <view class="counter">
+    <button bindtap="decrement">-1</button><text class="user-motto">{{count}}</text><button bindtap="increment">+1</button>
+  </view>
   <view class="btns">
     <button bindtap="gotoGamePage">去游戏页面</button>
     <button bindtap="gotoOtherPage">去其他页面</button>
