@@ -43,7 +43,7 @@ npm 相关问题参考：[小程序官方文档: npm 支持](https://developers.
 
 其类图如下所示：
 
-<img src="./assets/class-diagram.png" width="600px">
+<img src="./assets/class-diagram.png" width="800px">
 
 ```js
 // 平台无关的 Model
