@@ -1,7 +1,12 @@
 import * as util from "../utils/util";
 
+export interface LogItem {
+  data: string
+  timeStamp: string | number
+}
+
 export class Log {
-  logs: (string | number)[];
+  logs: LogItem[];
   constructor() {
     this.logs = [];
   }
